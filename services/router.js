@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const auth = require("./auth.js");
 const multer = require("./multer.js");
 const UserController = require("../controllers/UserController.js");
@@ -143,9 +144,21 @@ router.delete("/api/sauces/:id", auth.verifyToken, async (req, res) => {
   const Sauce = require("../models/Sauce");
 
   try {
+    const { userId } = req.auth;
     const _id = req.params.id;
-    const result = await Sauce.deleteOne({ _id });
-    res.status(200).json(result);
+    const sauce = await Sauce.findOne({ _id });
+    const { acknowledged, deletedCount } = await Sauce.deleteOne({
+      _id,
+      userId,
+    });
+    if (!acknowledged || deletedCount === 0) {
+      res.status(401).json({ message: "Not authorized" });
+      return;
+    } else {
+      const [_, filename] = sauce.imageUrl.split`/images/`;
+      const result = await fs.unlink(`public/images/${filename}`, () => null);
+      res.status(200).json(result);
+    }
   } catch (error) {
     res.status(400).json(error);
   }
