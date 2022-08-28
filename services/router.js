@@ -35,7 +35,6 @@ Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
 */
 router.get("/api/sauces", async (req, res) => {
   const Sauce = require("../models/Sauce");
-
   try {
     const result = await Sauce.find();
     res.status(200).json(result);
