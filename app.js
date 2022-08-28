@@ -1,10 +1,19 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+// var path = require("path");
+// var cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const router = require("./services/router.js");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+dotenv.config();
+
+const { DB_HOST, DB_NAME, DB_USER, DB_PASS } = process.env;
+
+mongoose
+  .connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`)
+  .then(() => console.log("mongo:ok"))
+  .catch(() => console.log("mongo:ko"));
 
 var app = express();
 
@@ -14,10 +23,6 @@ app.use(express.json());
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/toto", (req, res) => {
-  res.json(req.body);
-});
+app.use("/", router);
 
 module.exports = app;
