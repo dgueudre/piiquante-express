@@ -1,5 +1,10 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 const User = require("../models/User.js");
+
+dotenv.config();
+const { JWT_SECRET } = process.env;
 
 async function signup(email, rawPassword) {
   const password = await bcrypt.hash(rawPassword, 10);
@@ -17,7 +22,10 @@ async function login(email, rawPassword) {
   if (!valid) {
     throw new Error("invalid creds");
   }
-  return user;
+  const userId = user._id;
+  const authToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
+  const result = { userId, authToken };
+  return result;
 }
 
 module.exports = { signup, login };

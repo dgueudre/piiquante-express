@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("./auth.js");
 const UserController = require("../controllers/UserController.js");
 
 const router = express.Router();
@@ -41,20 +42,25 @@ router.post("/api/auth/login", async (req, res) => {
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
 */
-router.get("/api/sauces", async (req, res) => {
-  const Sauce = require("../models/Sauce");
-  try {
-    const result = await Sauce.find();
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(400).json(error);
+router.get(
+  "/api/sauces",
+  auth.verifyToken,
+  auth.verifyToken,
+  async (req, res) => {
+    const Sauce = require("../models/Sauce");
+    try {
+      const result = await Sauce.find();
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json(error);
+    }
   }
-});
+);
 
 /* GET /api/sauces/:id - 
 Single sauce Renvoie la sauce avec l’_id fourni.
 */
-router.get("/api/sauces/:id", async (req, res) => {
+router.get("/api/sauces/:id", auth.verifyToken, async (req, res) => {
   const Sauce = require("../models/Sauce");
 
   try {
@@ -74,7 +80,7 @@ Remarquez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande en fonction des
 données soumises avec le fichier.
 */
-router.post("/api/sauces", async (req, res) => {
+router.post("/api/sauces", auth.verifyToken, async (req, res) => {
   const Sauce = require("../models/Sauce");
   const sauce = new Sauce(req.body);
 
@@ -97,7 +103,7 @@ Notez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne du corps de la demande basée sur les
 données soumises avec le fichier.
 */
-router.put("/api/sauces/:id", async (req, res) => {
+router.put("/api/sauces/:id", auth.verifyToken, async (req, res) => {
   const Sauce = require("../models/Sauce");
 
   try {
@@ -112,7 +118,7 @@ router.put("/api/sauces/:id", async (req, res) => {
 /* DELETE /api/sauces/:id - { message: String } 
 Supprime la sauce avec l'_id fourni.
 */
-router.delete("/api/sauces/:id", async (req, res) => {
+router.delete("/api/sauces/:id", auth.verifyToken, async (req, res) => {
   const Sauce = require("../models/Sauce");
 
   try {
@@ -135,6 +141,6 @@ ou de ne pas disliker la même sauce plusieurs fois :
 un utilisateur ne peut avoir qu'une seule valeur pour chaque sauce. 
 Le nombre total de « Like » et de « Dislike » est mis à jour à chaque nouvelle notation.
 */
-router.post("/api/sauces/:id/like", defaultAction);
+router.post("/api/sauces/:id/like", auth.verifyToken, defaultAction);
 
 module.exports = router;
