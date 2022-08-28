@@ -109,12 +109,27 @@ Notez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne du corps de la demande basée sur les
 données soumises avec le fichier.
 */
-router.put("/api/sauces/:id", auth.verifyToken, async (req, res) => {
+router.put("/api/sauces/:id", auth.verifyToken, multer, async (req, res) => {
   const Sauce = require("../models/Sauce");
 
+  const { id } = req.params;
+
+  const rawSauce = req.file
+    ? {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      }
+    : { ...req.body };
+  delete rawSauce._id;
+
   try {
-    const _id = req.params.id;
-    const result = await Sauce.updateOne({ _id }, { ...req.body, _id });
+    const _id = id;
+    const result = await Sauce.updateOne(
+      { _id, userId: req.auth.userId },
+      { ...rawSauce, _id }
+    );
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json(error);
