@@ -3,6 +3,7 @@ const fs = require("fs");
 const auth = require("./auth.js");
 const multer = require("./multer.js");
 const UserController = require("../controllers/UserController.js");
+const SauceController = require("../controllers/SauceController.js");
 
 const router = express.Router();
 
@@ -10,18 +11,23 @@ function defaultAction(req, res, next) {
   res.json({ result: "INPROGESS" });
 }
 
+async function executeAction(action, res) {
+  try {
+    const [status, result] = await action;
+    res.status(status).json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 /* POST /api/auth/signup { email: string, password: string }
 { message: string }
 Hachage du mot de passe de l'utilisateur, ajout de l'utilisateur à la base de données.
 */
 router.post("/api/auth/signup", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const result = await UserController.signup(email, password);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(400).json(error);
-  }
+  const { email, password } = req.body;
+  const action = UserController.signup(email, password);
+  await executeAction(action, res);
 });
 
 /* POST /api/auth/login { email: string, password: string }
@@ -31,46 +37,26 @@ renvoie l _id de l'utilisateur depuis la base de données et un token web JSON s
 (contenant également l'_id de l'utilisateur).
 */
 router.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const result = await UserController.login(email, password);
-    res.status(200).json(result);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json(error);
-  }
+  const { email, password } = req.body;
+  const action = UserController.login(email, password);
+  await executeAction(action, res);
 });
 
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
 */
-router.get(
-  "/api/sauces",
-  auth.verifyToken,
-  auth.verifyToken,
-  async (req, res) => {
-    const Sauce = require("../models/Sauce");
-    try {
-      const result = await Sauce.find();
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(400).json(error);
-    }
-  }
-);
+router.get("/api/sauces", auth.verifyToken, async (req, res) => {
+  const action = SauceController.findAll();
+  await executeAction(action, res);
+});
 
 /* GET /api/sauces/:id - 
 Single sauce Renvoie la sauce avec l’_id fourni.
 */
 router.get("/api/sauces/:id", auth.verifyToken, async (req, res) => {
-  const Sauce = require("../models/Sauce");
-
-  try {
-    const result = await Sauce.findOne({ _id: req.params.id });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(400).json(error);
-  }
+  const { id } = req.params;
+  const action = SauceController.findOneById(id);
+  await executeAction(action, res);
 });
 
 /* POST /api/sauces { sauce: String, image: File }
@@ -83,20 +69,19 @@ lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande e
 données soumises avec le fichier.
 */
 router.post("/api/sauces", auth.verifyToken, multer, async (req, res) => {
-  const Sauce = require("../models/Sauce");
-  const rawSauce = JSON.parse(req.body.sauce);
+  let sauce;
+  try {
+    sauce = JSON.parse(req.body.sauce);
+  } catch (error) {
+    res.status(400).json({ message: "Bad request" });
+    return;
+  }
   const { userId } = req.auth;
   const imageUrl = `${req.protocol}://${req.get("host")}/images/${
     req.file.filename
   }`;
-  const sauce = new Sauce({ ...rawSauce, userId, imageUrl });
-
-  try {
-    const result = await sauce.save();
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(400).json(error);
-  }
+  const action = SauceController.create({ ...sauce, userId, imageUrl });
+  executeAction(action, res);
 });
 
 /* PUT /api/sauces/:id EITHER Sauce as JSON OR { sauce: String, image: File }
