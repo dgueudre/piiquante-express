@@ -1,4 +1,5 @@
 const express = require("express");
+const UserController = require("../controllers/UserController.js");
 
 const router = express.Router();
 
@@ -11,11 +12,9 @@ function defaultAction(req, res, next) {
 Hachage du mot de passe de l'utilisateur, ajout de l'utilisateur à la base de données.
 */
 router.post("/api/auth/signup", async (req, res) => {
-  const User = require("../models/User");
-  const user = new User(req.body);
-
   try {
-    const result = await user.save();
+    const { email, password } = req.body;
+    const result = await UserController.signup(email, password);
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json(error);
@@ -28,7 +27,16 @@ Vérification des informations d'identification de l'utilisateur,
 renvoie l _id de l'utilisateur depuis la base de données et un token web JSON signé
 (contenant également l'_id de l'utilisateur).
 */
-router.post("/api/auth/login", defaultAction);
+router.post("/api/auth/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = await UserController.login(email, password);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
 
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
