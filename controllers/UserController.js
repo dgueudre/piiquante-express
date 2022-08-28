@@ -23,8 +23,8 @@ async function login(email, rawPassword) {
     throw new Error("invalid creds");
   }
   const userId = user._id;
-  const authToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
-  const result = { userId, authToken };
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
+  const result = { userId, token };
   return result;
 }
 

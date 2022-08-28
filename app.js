@@ -4,6 +4,7 @@ const express = require("express");
 const logger = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cors = require("./services/cors.js");
 const router = require("./services/router.js");
 
 dotenv.config();
@@ -19,6 +20,7 @@ var app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
+app.use(cors);
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
