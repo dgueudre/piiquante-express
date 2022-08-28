@@ -1,5 +1,5 @@
 const express = require("express");
-// var path = require("path");
+var path = require("path");
 // var cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const dotenv = require("dotenv");
@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cors);
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", router);
 

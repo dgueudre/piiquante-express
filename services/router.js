@@ -1,5 +1,6 @@
 const express = require("express");
 const auth = require("./auth.js");
+const multer = require("./multer.js");
 const UserController = require("../controllers/UserController.js");
 
 const router = express.Router();
@@ -80,9 +81,14 @@ Remarquez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande en fonction des
 données soumises avec le fichier.
 */
-router.post("/api/sauces", auth.verifyToken, async (req, res) => {
+router.post("/api/sauces", auth.verifyToken, multer, async (req, res) => {
   const Sauce = require("../models/Sauce");
-  const sauce = new Sauce(req.body);
+  const rawSauce = JSON.parse(req.body.sauce);
+  const { userId } = req.auth;
+  const imageUrl = `${req.protocol}://${req.get("host")}/images/${
+    req.file.filename
+  }`;
+  const sauce = new Sauce({ ...rawSauce, userId, imageUrl });
 
   try {
     const result = await sauce.save();
