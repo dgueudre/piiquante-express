@@ -123,7 +123,8 @@ async function remove(req, res) {
 
 /* POST /api/sauces/:id/like { userId: String, like: Number }
 { message: String } 
-Définit le statut « Like » pour l' userId fourni. Si like = 1,  l'utilisateur aime (= like) la sauce. 
+Définit le statut « Like » pour l' userId fourni. 
+Si like = 1,  l'utilisateur aime (= like) la sauce. 
 Si like = 0, l'utilisateur annule son like ou son dislike. 
 Si like = -1, l'utilisateur n'aime pas (=dislike) la sauce. 
 L'ID de l'utilisateur doit être ajouté ou retiré du tableau approprié. 
@@ -132,11 +133,37 @@ ou de ne pas disliker la même sauce plusieurs fois :
 un utilisateur ne peut avoir qu'une seule valeur pour chaque sauce. 
 Le nombre total de « Like » et de « Dislike » est mis à jour à chaque nouvelle notation.
 */
-async function like(req, res) {}
+async function like(req, res) {
+  const { userId } = req.auth;
+  const { id: _id } = req.params;
+  const { like } = req.body;
+
+  const sauce = await Sauce.findOne({ _id });
+
+  const usersLiked = sauce.usersLiked.filter((a) => a !== userId);
+  const usersDisliked = sauce.usersDisliked.filter((a) => a !== userId);
+  if (like === 1) {
+    usersLiked.push(userId);
+    usersLiked.sort((a, b) => (a > b ? 1 : -1));
+  }
+  if (like === -1) {
+    usersDisliked.push(userId);
+    usersDisliked.sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  sauce.likes = usersLiked.length;
+  sauce.dislikes = usersDisliked.length;
+  sauce.usersLiked = usersLiked;
+  sauce.usersDisliked = usersDisliked;
+
+  await Sauce.updateOne({ _id }, sauce);
+  res.status(200).json({ message: "Likes updated" });
+}
 module.exports = {
   findAll: safe(findAll),
   findOneById: safe(findOneById),
   create: safe(create),
   update: safe(update),
   remove: safe(remove),
+  like: safe(like),
 };
