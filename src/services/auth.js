@@ -3,7 +3,7 @@ const safe = require("./safe");
 
 const { JWT_SECRET } = require("../libs/dotenv.js");
 
-function verifyToken(req, res, next) {
+function auth(req, res, next) {
   try {
     const authorization = req.headers.authorization;
     if (!authorization) {
@@ -24,4 +24,4 @@ function verifyToken(req, res, next) {
   }
 }
 
-module.exports = { verifyToken: safe(verifyToken) };
+module.exports = safe(auth);

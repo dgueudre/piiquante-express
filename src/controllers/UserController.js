@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
+const safe = require("../services/safe.js");
 
 const { JWT_SECRET } = require("../libs/dotenv.js");
 
@@ -44,4 +45,4 @@ async function login(req, res) {
   return res.status(200).json({ userId, token });
 }
 
-module.exports = { signup, login };
+module.exports = { signup: safe(signup), login: safe(login) };
