@@ -2,14 +2,10 @@ const express = require("express");
 var path = require("path");
 // var cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("./services/cors.js");
 const router = require("./services/router.js");
-
-dotenv.config();
-
-const { DB_HOST, DB_NAME, DB_USER, DB_PASS } = process.env;
+const { DB_HOST, DB_NAME, DB_USER, DB_PASS } = require("./libs/dotenv.js");
 
 mongoose
   .connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`)

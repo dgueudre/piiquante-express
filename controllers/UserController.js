@@ -1,10 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 const User = require("../models/User.js");
 
-dotenv.config();
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = require("../libs/dotenv.js");
 
 async function signup(email, rawPassword) {
   const password = await bcrypt.hash(rawPassword, 10);
