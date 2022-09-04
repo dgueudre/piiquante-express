@@ -4,6 +4,7 @@ const auth = require("./auth.js");
 const multer = require("./multer.js");
 const UserController = require("../controllers/UserController.js");
 const SauceController = require("../controllers/SauceController.js");
+const safe = require("./safe.js");
 
 const router = express.Router();
 
@@ -20,27 +21,8 @@ async function executeAction(action, res) {
   }
 }
 
-/* POST /api/auth/signup { email: string, password: string }
-{ message: string }
-Hachage du mot de passe de l'utilisateur, ajout de l'utilisateur à la base de données.
-*/
-router.post("/api/auth/signup", async (req, res) => {
-  const { email, password } = req.body;
-  const action = UserController.signup(email, password);
-  await executeAction(action, res);
-});
-
-/* POST /api/auth/login { email: string, password: string }
-{ userId: string, token: string }
-Vérification des informations d'identification de l'utilisateur, 
-renvoie l _id de l'utilisateur depuis la base de données et un token web JSON signé
-(contenant également l'_id de l'utilisateur).
-*/
-router.post("/api/auth/login", async (req, res) => {
-  const { email, password } = req.body;
-  const action = UserController.login(email, password);
-  await executeAction(action, res);
-});
+router.post("/api/auth/signup", safe(UserController.signup));
+router.post("/api/auth/login", safe(UserController.login));
 
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
