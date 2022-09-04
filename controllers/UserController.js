@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
 
 const { JWT_SECRET } = require("../libs/dotenv.js");
-const HttpError = require("../services/error.js");
 
 /* POST /api/auth/signup { email: string, password: string }
 { message: string }
@@ -15,11 +14,10 @@ async function signup(req, res) {
   try {
     const user = new User({ email, password });
     await user.save();
-
-    res.status(201).json({ message: "User created" });
+    return res.status(201).json({ message: "User created" });
   } catch (error) {
     if (error.name === "ValidationError") {
-      throw new HttpError(400, `Email ${email} already use`);
+      return res.status(400).json({ message: `Email ${email} already use` });
     }
     throw error;
   }
@@ -35,16 +33,15 @@ async function login(req, res) {
   const { email, password: rawPassword } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw new HttpError(401, "Invalid credentials");
+    return res.status(401).json({ message: "Invalid credentials" });
   }
   const valid = await bcrypt.compare(rawPassword, user.password);
   if (!valid) {
-    throw new HttpError(401, "Invalid credentials");
-    return;
+    return res.status(401).json({ message: "Invalid credentials" });
   }
   const userId = user._id;
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
-  res.status(200).json({ userId, token });
+  return res.status(200).json({ userId, token });
 }
 
 module.exports = { signup, login };
