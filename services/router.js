@@ -5,20 +5,12 @@ const multer = require("./multer.js");
 const UserController = require("../controllers/UserController.js");
 const SauceController = require("../controllers/SauceController.js");
 const safe = require("./safe.js");
+const Sauce = require("../models/Sauce");
 
 const router = express.Router();
 
 function defaultAction(req, res, next) {
-  res.json({ result: "INPROGESS" });
-}
-
-async function executeAction(action, res) {
-  try {
-    const [status, result] = await action;
-    res.status(status).json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Internal error" });
-  }
+  res.json({ message: "INPROGESS" });
 }
 
 router.post("/api/auth/signup", safe(UserController.signup));
@@ -27,18 +19,22 @@ router.post("/api/auth/login", safe(UserController.login));
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
 */
-router.get("/api/sauces", auth.verifyToken, async (req, res) => {
-  const action = SauceController.findAll();
-  await executeAction(action, res);
-});
+router.get(
+  "/api/sauces",
+  auth.verifyToken,
+  safe(async (req, res) => {
+    const result = await Sauce.find();
+    return res.status(200).json(result);
+  })
+);
 
 /* GET /api/sauces/:id - 
 Single sauce Renvoie la sauce avec l’_id fourni.
 */
 router.get("/api/sauces/:id", auth.verifyToken, async (req, res) => {
   const { id } = req.params;
-  const action = SauceController.findOneById(id);
-  await executeAction(action, res);
+  const result = await Sauce.findOne({ _id: id });
+  return res.status(200).json(result);
 });
 
 /* POST /api/sauces { sauce: String, image: File }
@@ -51,9 +47,9 @@ lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande e
 données soumises avec le fichier.
 */
 router.post("/api/sauces", auth.verifyToken, multer, async (req, res) => {
-  let sauce;
+  let rawSauce;
   try {
-    sauce = JSON.parse(req.body.sauce);
+    rawSauce = JSON.parse(req.body.sauce);
   } catch (error) {
     res.status(400).json({ message: "Bad request" });
     return;
@@ -62,8 +58,19 @@ router.post("/api/sauces", auth.verifyToken, multer, async (req, res) => {
   const imageUrl = `${req.protocol}://${req.get("host")}/images/${
     req.file.filename
   }`;
-  const action = SauceController.create({ ...sauce, userId, imageUrl });
-  executeAction(action, res);
+
+  delete rawSauce._id;
+  const sauce = new Sauce({
+    ...rawSauce,
+    userId,
+    imageUrl,
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [],
+    usersDisliked: [],
+  });
+  const result = await sauce.save();
+  return res.status(201).json({ message: "Sauce created" });
 });
 
 /* PUT /api/sauces/:id EITHER Sauce as JSON OR { sauce: String, image: File }
