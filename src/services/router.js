@@ -46,6 +46,9 @@ Remarquez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande en fonction des
 données soumises avec le fichier.
 */
+
+function dataOrImage(req) {}
+
 router.post("/api/sauces", auth.verifyToken, multer, async (req, res) => {
   let rawSauce;
   try {
