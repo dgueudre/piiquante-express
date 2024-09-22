@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler } from 'express';
 
 function safe(middleware: RequestHandler): RequestHandler {
   return async (req, res, next) => {

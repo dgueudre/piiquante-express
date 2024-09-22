@@ -1,7 +1,6 @@
-import { RequestHandler } from 'express-serve-static-core';
-import jwt from 'jsonwebtoken';
+import { RequestHandler } from 'express';
 
-import { JWT_SECRET } from '../libs/dotenv';
+import { jwtService } from './jwtService';
 import safe from './safe';
 
 // On doit autoriser à ajouter le user à la Request
@@ -17,10 +16,10 @@ const unsafeAuth: RequestHandler = (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
     if (!authorization) {
-      throw new jwt.JsonWebTokenError('Unauthorized');
+      throw new Error('Unauthorized');
     }
     const [_, token] = req.headers.authorization?.split(' ') || [];
-    const decodedToken = jwt.verify(token, JWT_SECRET ?? '') as any;
+    const decodedToken = jwtService.verify(token);
     const { userId } = decodedToken;
     req.auth = { userId };
     next();

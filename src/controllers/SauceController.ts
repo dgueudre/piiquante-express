@@ -1,5 +1,4 @@
-import { Request } from 'express';
-import { RequestHandler } from 'express-serve-static-core';
+import { Request, RequestHandler } from 'express';
 import fs from 'fs';
 
 import { Sauce } from '../models/Sauce';

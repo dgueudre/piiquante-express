@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
-import { RequestHandler } from 'express-serve-static-core';
-import jwt from 'jsonwebtoken';
+import { RequestHandler } from 'express';
 
-import { JWT_SECRET } from '../libs/dotenv';
 import { User } from '../models/User';
+import { jwtService } from '../services/jwtService';
 import safe from '../services/safe';
 
 /* POST /api/auth/signup { email: string, password: string }
@@ -42,7 +41,7 @@ const login: RequestHandler = async (req, res) => {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
   const userId = user._id;
-  const token = jwt.sign({ userId }, JWT_SECRET ?? '', { expiresIn: '24h' });
+  const token = jwtService.sign({ userId });
   return res.status(200).json({ userId, token });
 };
 
