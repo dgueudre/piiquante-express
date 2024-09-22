@@ -1,0 +1,58 @@
+POST http://localhost:3011/api/auth/signup
+Content-Type: application/json
+{
+    "email": "test@test.com",
+    "password": "@secured-password"
+}
+
+POST http://localhost:3011/api/auth/login
+Content-Type: application/json
+{
+    "email": "test@test.com",
+    "password": "@secured-password"
+}
+
+{{
+  const { parsedBody, statusCode } = response
+  token = parsedBody?.token
+}}
+
+GET http://localhost:3011/api/sauces
+Authorization: Bearer {{ token }}
+
+GET http://localhost:3011/api/sauces/12
+Authorization: Bearer {{ token }}
+
+### test
+{{
+  exports.sauce = JSON.stringify({
+    name: "tabasco2",
+    manufacturer: "tabasco",
+    description: "hot sauce",
+    mainPepper: "red",
+    heat: 3
+  })
+}}
+POST http://localhost:3011/api/sauces
+Authorization: Bearer {{ token }}
+Content-Type: multipart/form-data; boundary=End
+
+--End
+Content-Disposition: form-data; name="sauce"
+
+{{ sauce }}
+--End
+Content-Disposition: form-data; name="image"; filename="tabasco-classic.jpg"
+Content-Type: image/jpeg
+
+< ./images/tabasco-classic.jpg
+--End--
+
+PUT http://localhost:3011/api/sauces/12
+Authorization: Bearer {{ token }}
+
+DELETE http://localhost:3011/api/sauces/66f05a07a28b543618cc85df
+Authorization: Bearer {{ token }}
+
+POST http://localhost:3011/api/sauces/12/like
+Authorization: Bearer {{ token }}
