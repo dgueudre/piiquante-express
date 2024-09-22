@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User.js");
-const safe = require("../services/safe.js");
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-const { JWT_SECRET } = require("../libs/dotenv.js");
+import { JWT_SECRET } from '../libs/dotenv';
+import User from '../models/User';
+import safe from '../services/safe';
 
 /* POST /api/auth/signup { email: string, password: string }
 { message: string }
@@ -15,9 +15,9 @@ async function signup(req, res) {
   try {
     const user = new User({ email, password });
     await user.save();
-    return res.status(201).json({ message: "User created" });
+    return res.status(201).json({ message: 'User created' });
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       return res.status(400).json({ message: `Email ${email} already use` });
     }
     throw error;
@@ -34,15 +34,15 @@ async function login(req, res) {
   const { email, password: rawPassword } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res.status(401).json({ message: 'Invalid credentials' });
   }
   const valid = await bcrypt.compare(rawPassword, user.password);
   if (!valid) {
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res.status(401).json({ message: 'Invalid credentials' });
   }
   const userId = user._id;
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '24h' });
   return res.status(200).json({ userId, token });
 }
 
-module.exports = { signup: safe(signup), login: safe(login) };
+export default { signup: safe(signup), login: safe(login) };

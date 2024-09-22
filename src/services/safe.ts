@@ -10,4 +10,4 @@ function safe(middleware) {
   };
 }
 
-module.exports = safe;
+export default safe;

@@ -1,6 +1,7 @@
-const fs = require("fs");
-const Sauce = require("../models/Sauce.js");
-const safe = require("../services/safe.js");
+import fs from 'fs';
+
+import Sauce from '../models/Sauce';
+import safe from '../services/safe';
 
 /* function that helps getting imageUrl & data from sauce Field
  */
@@ -10,7 +11,7 @@ function getAllInputData(fieldName) {
     let data;
     if (file) {
       data = JSON.parse(body[fieldName]);
-      data.imageUrl = `${protocol}://${req.get("host")}/images/${
+      data.imageUrl = `${protocol}://${req.get('host')}/images/${
         file.filename
       }`;
     } else {
@@ -21,7 +22,7 @@ function getAllInputData(fieldName) {
   };
 }
 
-const getAllSauceData = getAllInputData("sauce");
+const getAllSauceData = getAllInputData('sauce');
 
 async function removeImage(sauce) {
   const [_, filename] = sauce.imageUrl.split`/images/`;
@@ -67,7 +68,7 @@ async function create(req, res) {
     usersDisliked: [],
   });
   await sauce.save();
-  return res.status(201).json({ message: "Sauce created" });
+  return res.status(201).json({ message: 'Sauce created' });
 }
 
 /* PUT /api/sauces/:id EITHER Sauce as JSON OR { sauce: String, image: File }
@@ -97,7 +98,7 @@ async function update(req, res) {
   }
 
   await Sauce.updateOne({ _id, userId }, { ...rawSauce, _id });
-  res.status(200).json({ message: "Sauce modified" });
+  res.status(200).json({ message: 'Sauce modified' });
 }
 
 /* DELETE /api/sauces/:id - { message: String } 
@@ -115,10 +116,10 @@ async function remove(req, res) {
 
   const { acknowledged, deletedCount } = await Sauce.deleteOne({ _id, userId });
   if (!acknowledged || deletedCount === 0) {
-    throw new Error("Problem while deleting the sauce");
+    throw new Error('Problem while deleting the sauce');
   }
   await removeImage(sauce);
-  res.status(200).json({ message: "Sauce deleted" });
+  res.status(200).json({ message: 'Sauce deleted' });
 }
 
 /* POST /api/sauces/:id/like { userId: String, like: Number }
@@ -157,9 +158,9 @@ async function like(req, res) {
   sauce.usersDisliked = usersDisliked;
 
   await Sauce.updateOne({ _id }, sauce);
-  res.status(200).json({ message: "Likes updated" });
+  res.status(200).json({ message: 'Likes updated' });
 }
-module.exports = {
+export default {
   findAll: safe(findAll),
   findOneById: safe(findOneById),
   create: safe(create),
