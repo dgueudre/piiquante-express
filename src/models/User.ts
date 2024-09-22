@@ -1,11 +1,14 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
-const User = new mongoose.Schema({
+export interface IUser extends Document {
+  email: string;
+  password: string;
+}
+
+const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-});
+}).plugin(uniqueValidator);
 
-User.plugin(uniqueValidator);
-
-export default mongoose.model('User', User);
+export const User = model<IUser>('User', userSchema);

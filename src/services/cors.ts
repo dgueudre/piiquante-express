@@ -1,4 +1,6 @@
-function cors(req, res, next) {
+import { RequestHandler } from 'express';
+
+export const cors: RequestHandler = (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -9,6 +11,4 @@ function cors(req, res, next) {
     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
   );
   next();
-}
-
-export default cors;
+};

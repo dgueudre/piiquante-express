@@ -1,12 +1,14 @@
+import { Request } from 'express';
+import { RequestHandler } from 'express-serve-static-core';
 import fs from 'fs';
 
-import Sauce from '../models/Sauce';
+import { Sauce } from '../models/Sauce';
 import safe from '../services/safe';
 
 /* function that helps getting imageUrl & data from sauce Field
  */
-function getAllInputData(fieldName) {
-  return (req) => {
+function getAllInputData(fieldName: string) {
+  return (req: Request) => {
     const { body, file, protocol } = req;
     let data;
     if (file) {
@@ -24,7 +26,7 @@ function getAllInputData(fieldName) {
 
 const getAllSauceData = getAllInputData('sauce');
 
-async function removeImage(sauce) {
+async function removeImage(sauce: any) {
   const [_, filename] = sauce.imageUrl.split`/images/`;
   const result = await fs.unlink(`public/images/${filename}`, () => null);
 }
@@ -32,19 +34,19 @@ async function removeImage(sauce) {
 /* GET /api/sauces - 
 Array of sauces Renvoie un tableau de toutes les sauces de la base de données.
 */
-async function findAll(req, res) {
+const findAll: RequestHandler = async (req, res) => {
   const result = await Sauce.find();
   return res.status(200).json(result);
-}
+};
 
 /* GET /api/sauces/:id - 
 Single sauce Renvoie la sauce avec l’_id fourni.
 */
-async function findOneById(req, res) {
+const findOneById: RequestHandler = async (req, res) => {
   const { id } = req.params;
   const result = await Sauce.findOne({ _id: id });
   return res.status(200).json(result);
-}
+};
 
 /* POST /api/sauces { sauce: String, image: File }
 { message: String }
@@ -55,7 +57,7 @@ Remarquez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne pour le corps de la demande en fonction des
 données soumises avec le fichier.
 */
-async function create(req, res) {
+const create: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
   const rawSauce = getAllSauceData(req);
 
@@ -69,7 +71,7 @@ async function create(req, res) {
   });
   await sauce.save();
   return res.status(201).json({ message: 'Sauce created' });
-}
+};
 
 /* PUT /api/sauces/:id EITHER Sauce as JSON OR { sauce: String, image: File }
 { message: String } 
@@ -82,12 +84,12 @@ Notez que le corps de la demande initiale est vide ;
 lorsque multer est ajouté, il renvoie une chaîne du corps de la demande basée sur les
 données soumises avec le fichier.
 */
-async function update(req, res) {
+const update: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
   const { id: _id } = req.params;
   const rawSauce = getAllSauceData(req);
 
-  const sauce = await Sauce.findOne({ _id });
+  const sauce = (await Sauce.findOne({ _id })) as any;
 
   if (sauce.userId !== userId) {
     return res.status(401).json({ message: "you can't update this sauce" });
@@ -99,16 +101,16 @@ async function update(req, res) {
 
   await Sauce.updateOne({ _id, userId }, { ...rawSauce, _id });
   res.status(200).json({ message: 'Sauce modified' });
-}
+};
 
 /* DELETE /api/sauces/:id - { message: String } 
 Supprime la sauce avec l'_id fourni.
 */
-async function remove(req, res) {
+const remove: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
   const { id: _id } = req.params;
 
-  const sauce = await Sauce.findOne({ _id });
+  const sauce = (await Sauce.findOne({ _id })) as any;
 
   if (sauce.userId !== userId) {
     return res.status(401).json({ message: "you can't delete this sauce" });
@@ -120,7 +122,7 @@ async function remove(req, res) {
   }
   await removeImage(sauce);
   res.status(200).json({ message: 'Sauce deleted' });
-}
+};
 
 /* POST /api/sauces/:id/like { userId: String, like: Number }
 { message: String } 
@@ -134,22 +136,22 @@ ou de ne pas disliker la même sauce plusieurs fois :
 un utilisateur ne peut avoir qu'une seule valeur pour chaque sauce. 
 Le nombre total de « Like » et de « Dislike » est mis à jour à chaque nouvelle notation.
 */
-async function like(req, res) {
+const like: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
   const { id: _id } = req.params;
   const { like } = req.body;
 
-  const sauce = await Sauce.findOne({ _id });
+  const sauce = (await Sauce.findOne({ _id })) as any;
 
-  const usersLiked = sauce.usersLiked.filter((a) => a !== userId);
-  const usersDisliked = sauce.usersDisliked.filter((a) => a !== userId);
+  const usersLiked = sauce.usersLiked.filter((a: string) => a !== userId);
+  const usersDisliked = sauce.usersDisliked.filter((a: string) => a !== userId);
   if (like === 1) {
     usersLiked.push(userId);
-    usersLiked.sort((a, b) => (a > b ? 1 : -1));
+    usersLiked.sort((a: string, b: string) => (a > b ? 1 : -1));
   }
   if (like === -1) {
     usersDisliked.push(userId);
-    usersDisliked.sort((a, b) => (a > b ? 1 : -1));
+    usersDisliked.sort((a: string, b: string) => (a > b ? 1 : -1));
   }
 
   sauce.likes = usersLiked.length;
@@ -159,7 +161,7 @@ async function like(req, res) {
 
   await Sauce.updateOne({ _id }, sauce);
   res.status(200).json({ message: 'Likes updated' });
-}
+};
 export default {
   findAll: safe(findAll),
   findOneById: safe(findOneById),

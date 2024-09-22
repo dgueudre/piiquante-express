@@ -2,7 +2,7 @@ import express from 'express';
 
 import SauceController from '../controllers/SauceController';
 import UserController from '../controllers/UserController';
-import auth from './auth';
+import { auth } from './auth';
 import multer from './multer';
 
 const router = express.Router();

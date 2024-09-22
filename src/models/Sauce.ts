@@ -1,6 +1,20 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-const Sauce = new mongoose.Schema({
+export interface ISauce extends Document {
+  userId: string;
+  name: string;
+  manufacturer: string;
+  description: string;
+  mainPepper: string;
+  imageUrl: string;
+  heat: number;
+  likes: number;
+  dislikes: number;
+  usersLiked: string[];
+  usersDisliked: string[];
+}
+
+const sauceSchema = new Schema({
   userId: { type: String, require: true },
   name: { type: String, require: true },
   manufacturer: { type: String, require: true },
@@ -14,4 +28,4 @@ const Sauce = new mongoose.Schema({
   usersDisliked: { type: [String], require: false },
 });
 
-export default mongoose.model('Sauce', Sauce);
+export const Sauce = model<ISauce>('Sauce', sauceSchema);

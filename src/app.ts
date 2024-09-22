@@ -1,10 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
-// var cookieParser = require("cookie-parser");
 import logger from 'morgan';
 
 import { DB_HOST, DB_NAME, DB_USER, DB_PASS } from './libs/dotenv';
-import cors from './services/cors';
+import { cors } from './services/cors';
 import router from './services/router';
 
 var path = require('path');
