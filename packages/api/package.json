@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node bin/index.ts\"",
-    "format": "prettier --write ."
+    "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node bin/index.ts\""
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

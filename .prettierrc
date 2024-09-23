@@ -3,6 +3,6 @@
   "semi": true,
   "singleQuote": true,
   "trailingComma": "es5",
-  "importOrder": ["^[./]"],
+  "importOrder": ["^@piiquante/(.*)$", "^[./]"],
   "importOrderSeparation": true
 }
