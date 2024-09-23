@@ -13,7 +13,11 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errors = err.errors;
   }
 
-  if (!status) {
+  if (err.name === 'ValidationError') {
+    status = 400;
+  }
+
+  if (status === 500) {
     console.error(err);
   }
 

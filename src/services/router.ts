@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { sauceController } from '../controllers/SauceController';
-import { userController } from '../controllers/UserController';
+import { sauceController } from '../controllers/sauceController';
+import { userController } from '../controllers/userController';
 import { jwtGuard } from '../middlewares/jwtGuard';
 import multer from './multer';
 

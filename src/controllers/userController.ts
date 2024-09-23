@@ -13,16 +13,9 @@ Hachage du mot de passe de l'utilisateur, ajout de l'utilisateur à la base de d
 const signup: RequestHandler = async (req, res) => {
   const { email, password: rawPassword } = req.body;
   const password = await bcrypt.hash(rawPassword, 10);
-  try {
-    const user = new User({ email, password });
-    await user.save();
-    return res.status(201).json({ message: 'User created' });
-  } catch (error: any) {
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({ message: `Email ${email} already use` });
-    }
-    throw error;
-  }
+  const user = new User({ email, password });
+  await user.save();
+  return res.status(201).json({ user, message: 'User created' });
 };
 
 /* POST /api/auth/login { email: string, password: string }
