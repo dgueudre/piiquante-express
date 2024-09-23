@@ -1,5 +1,1 @@
-.mongo
-.env
 node_modules
-public/images/*
-!public/images/.gitkeep

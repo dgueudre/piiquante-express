@@ -1,3 +1,4 @@
+import { User } from '@piiquante/shared';
 import express from 'express';
 import logger from 'morgan';
 import path from 'path';
@@ -17,3 +18,5 @@ export const app = express()
   .use(express.static(path.join(__dirname, '../public')))
   .use(mainRouter)
   .use(errorHandler);
+
+let toto: User;
