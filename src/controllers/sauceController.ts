@@ -1,29 +1,8 @@
-import { Request, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import fs from 'fs';
 
 import { Sauce } from '../models/Sauce';
 import safe from '../services/safe';
-
-/* function that helps getting imageUrl & data from sauce Field
- */
-function getAllInputData(fieldName: string) {
-  return (req: Request) => {
-    const { body, file, protocol } = req;
-    let data;
-    if (file) {
-      data = JSON.parse(body[fieldName]);
-      data.imageUrl = `${protocol}://${req.get('host')}/images/${
-        file.filename
-      }`;
-    } else {
-      data = body;
-    }
-    delete data._id;
-    return data;
-  };
-}
-
-const getAllSauceData = getAllInputData('sauce');
 
 async function removeImage(sauce: any) {
   const [_, filename] = sauce.imageUrl.split`/images/`;
@@ -58,7 +37,7 @@ données soumises avec le fichier.
 */
 const create: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
-  const rawSauce = getAllSauceData(req);
+  const rawSauce = req.body;
 
   const sauce = new Sauce({
     ...rawSauce,
@@ -86,7 +65,7 @@ données soumises avec le fichier.
 const update: RequestHandler = async (req, res) => {
   const { userId } = req.auth;
   const { id: _id } = req.params;
-  const rawSauce = getAllSauceData(req);
+  const rawSauce = req.body;
 
   const sauce = (await Sauce.findOne({ _id })) as any;
 

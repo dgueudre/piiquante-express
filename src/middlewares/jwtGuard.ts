@@ -4,7 +4,7 @@ import { jwtService } from '../services/jwtService';
 import safe from '../services/safe';
 
 const unsafeJwtGuard: RequestHandler = (req, res, next) => {
-  const [_, token] = req.headers.authorization?.split(' ') || [];
+  const token = req.headers.authorization?.split(' ').pop() ?? '';
   const { userId } = jwtService.verify(token);
   req.auth = { userId };
   next();

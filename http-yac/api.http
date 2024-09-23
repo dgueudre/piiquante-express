@@ -3,7 +3,7 @@ GET http://localhost:3011/api/404
 POST http://localhost:3011/api/auth/signup
 Content-Type: application/json
 {
-    "email": "tesZt@test.com",
+    "email": "test@test.com",
     "password": "@secured-password"
 }
 
