@@ -1,10 +1,8 @@
 import { sign, verify } from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../configuration';
+import { JwtPayload } from '@piiquante/shared';
 
-export type JwtPayload = {
-  userId: string;
-};
+import { JWT_SECRET } from '../configuration';
 
 export const jwtService = {
   sign: (payload: JwtPayload) => {
