@@ -5,3 +5,8 @@ export type User = {
 export type JwtPayload = {
   userId: string;
 };
+
+export type AuthPayload = {
+  userId: string;
+  token: string;
+};

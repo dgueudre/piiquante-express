@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-function safe(middleware: RequestHandler): RequestHandler {
+function safe<T>(middleware: RequestHandler<T>): RequestHandler<T> {
   return async (req, res, next) => {
     try {
       await middleware(req, res, next);

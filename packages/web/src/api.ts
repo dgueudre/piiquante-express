@@ -1,3 +1,5 @@
+import { AuthPayload } from '@piiquante/shared';
+
 const API_URL = 'http://localhost:3011/api';
 
 const login = async (email: string, password: string) => {
@@ -9,7 +11,7 @@ const login = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
   });
 
-  const auth = await response.json();
+  const auth: AuthPayload = await response.json();
 
   console.log(auth);
 

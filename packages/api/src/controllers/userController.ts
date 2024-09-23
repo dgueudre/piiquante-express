@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
 import createHttpError from 'http-errors';
 
+import { AuthPayload } from '@piiquante/shared';
+
 import { User } from '../models/User';
 import { jwtService } from '../services/jwtService';
 import safe from '../services/safe';
@@ -24,7 +26,7 @@ Vérification des informations d'identification de l'utilisateur,
 renvoie l _id de l'utilisateur depuis la base de données et un token web JSON signé
 (contenant également l'_id de l'utilisateur).
 */
-const login: RequestHandler = async (req, res) => {
+const login: RequestHandler<AuthPayload> = async (req, res) => {
   const { email, password: rawPassword } = req.body;
   const user = (await User.findOne({ email })) as any;
   if (!user) {
