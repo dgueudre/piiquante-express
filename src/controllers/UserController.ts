@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
+import createHttpError from 'http-errors';
 
 import { User } from '../models/User';
 import { jwtService } from '../services/jwtService';
@@ -34,15 +35,18 @@ const login: RequestHandler = async (req, res) => {
   const { email, password: rawPassword } = req.body;
   const user = (await User.findOne({ email })) as any;
   if (!user) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+    throw createHttpError.Unauthorized('Invalid credentials');
   }
   const valid = await bcrypt.compare(rawPassword, user.password);
   if (!valid) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+    throw createHttpError.Unauthorized('Invalid credentials');
   }
   const userId = user._id;
   const token = jwtService.sign({ userId });
   return res.status(200).json({ userId, token });
 };
 
-export default { signup: safe(signup), login: safe(login) };
+export const userController = {
+  signup: safe(signup),
+  login: safe(login),
+};

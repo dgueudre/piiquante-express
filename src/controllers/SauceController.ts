@@ -161,7 +161,7 @@ const like: RequestHandler = async (req, res) => {
   await Sauce.updateOne({ _id }, sauce);
   res.status(200).json({ message: 'Likes updated' });
 };
-export default {
+export const sauceController = {
   findAll: safe(findAll),
   findOneById: safe(findOneById),
   create: safe(create),

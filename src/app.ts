@@ -2,6 +2,8 @@ import express from 'express';
 import logger from 'morgan';
 import path from 'path';
 
+import { errorHandler } from './middlewares/errorHandler';
+import { notFound } from './middlewares/notFound';
 import { cors } from './services/cors';
 import { dbService } from './services/dbService';
 import router from './services/router';
@@ -18,3 +20,6 @@ app.use(cors);
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', router);
+
+app.use(notFound);
+app.use(errorHandler);

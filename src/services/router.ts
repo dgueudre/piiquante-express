@@ -1,20 +1,20 @@
 import express from 'express';
 
-import SauceController from '../controllers/SauceController';
-import UserController from '../controllers/UserController';
+import { sauceController } from '../controllers/SauceController';
+import { userController } from '../controllers/UserController';
 import { jwtGuard } from '../middlewares/jwtGuard';
 import multer from './multer';
 
 const router = express.Router();
 
-router.post('/api/auth/signup', UserController.signup);
-router.post('/api/auth/login', UserController.login);
+router.post('/api/auth/signup', userController.signup);
+router.post('/api/auth/login', userController.login);
 
-router.get('/api/sauces', jwtGuard, SauceController.findAll);
-router.get('/api/sauces/:id', jwtGuard, SauceController.findOneById);
-router.post('/api/sauces', jwtGuard, multer, SauceController.create);
-router.put('/api/sauces/:id', jwtGuard, multer, SauceController.update);
-router.delete('/api/sauces/:id', jwtGuard, SauceController.remove);
-router.post('/api/sauces/:id/like', jwtGuard, SauceController.like);
+router.get('/api/sauces', jwtGuard, sauceController.findAll);
+router.get('/api/sauces/:id', jwtGuard, sauceController.findOneById);
+router.post('/api/sauces', jwtGuard, multer, sauceController.create);
+router.put('/api/sauces/:id', jwtGuard, multer, sauceController.update);
+router.delete('/api/sauces/:id', jwtGuard, sauceController.remove);
+router.post('/api/sauces/:id/like', jwtGuard, sauceController.like);
 
 export default router;
