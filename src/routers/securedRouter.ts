@@ -2,21 +2,10 @@ import express from 'express';
 
 import { sauceController } from '../controllers/sauceController';
 import { multipart } from '../middlewares/multipart';
-import { upload } from '../middlewares/upload';
 
 export const securedRouter = express
   .Router()
-  .post(
-    '/api/sauces',
-    upload.single('image'),
-    multipart.toJson('sauce'),
-    sauceController.create
-  )
-  .put(
-    '/api/sauces/:id',
-    upload.single('image'),
-    multipart.toJson('sauce'),
-    sauceController.update
-  )
-  .delete('/api/sauces/:id', sauceController.remove)
-  .post('/api/sauces/:id/like', sauceController.like);
+  .post('/sauces', multipart('sauce', 'image'), sauceController.create)
+  .put('/sauces/:id', multipart('sauce', 'image'), sauceController.update)
+  .delete('/sauces/:id', sauceController.remove)
+  .post('/sauces/:id/like', sauceController.like);
