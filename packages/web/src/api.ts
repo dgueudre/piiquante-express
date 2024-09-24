@@ -1,31 +1,23 @@
-import { AuthPayload } from '@piiquante/shared';
+import axios, { AxiosError } from 'axios';
+
+import { AuthPayload, ISauce } from '@piiquante/shared';
 
 const API_URL = 'http://localhost:3011/api';
 
 const login = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
+  const { data } = await axios.post<AuthPayload>(
+    //
+    `${API_URL}/auth/login`,
+    { email, password }
+  );
 
-  const auth: AuthPayload = await response.json();
-
-  console.log(auth);
-
-  return auth;
+  return data;
 };
 
 const getAllSauces = async () => {
-  const response = await fetch(`${API_URL}/sauces`);
+  const { data } = await axios.get<ISauce[]>(`${API_URL}/sauces`);
 
-  const sauces = await response.json();
-
-  console.log(sauces);
-
-  return sauces;
+  return data;
 };
 
 export const api = {

@@ -1,10 +1,7 @@
 import { model, Schema } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
-export interface IUser extends Document {
-  email: string;
-  password: string;
-}
+import { IUser } from '@piiquante/shared';
 
 const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },

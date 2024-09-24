@@ -1,18 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-export interface ISauce extends Document {
-  userId: string;
-  name: string;
-  manufacturer: string;
-  description: string;
-  mainPepper: string;
-  imageUrl: string;
-  heat: number;
-  likes: number;
-  dislikes: number;
-  usersLiked: string[];
-  usersDisliked: string[];
-}
+import { ISauce } from '@piiquante/shared';
 
 const sauceSchema = new Schema({
   userId: { type: String, require: true },
