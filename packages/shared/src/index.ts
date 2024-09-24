@@ -17,6 +17,7 @@ export type ILoginForm = {
 };
 
 export interface ISauce {
+  _id: string;
   userId: string;
   name: string;
   manufacturer: string;

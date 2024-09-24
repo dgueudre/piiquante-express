@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import { MyApp } from './MyApp';
+import { AppLayout } from './layouts/AppLayout';
 import { ContactPage } from './pages/ContactPage';
 
 const queryClient = new QueryClient();
@@ -11,10 +12,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename="/">
-        <Routes>
-          <Route path="/" element={<MyApp />} />
-          <Route path="/contact" element={<ContactPage />} />
-        </Routes>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<MyApp />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </QueryClientProvider>
   );

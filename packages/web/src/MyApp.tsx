@@ -13,7 +13,7 @@ export function MyApp() {
   return (
     <>
       <LoginForm />
-      {sauces?.map((sauce) => <p>{sauce.name}</p>)}
+      {sauces?.map((sauce) => <p key={sauce._id}>{sauce.name}</p>)}
     </>
   );
 }
