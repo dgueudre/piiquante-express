@@ -9,5 +9,9 @@
     "api": "cd packages/api && npm start",
     "web": "cd packages/web && npm run dev",
     "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.3.3"
   }
 }
