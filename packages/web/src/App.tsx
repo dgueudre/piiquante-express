@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import './App.css';
 import { MyApp } from './MyApp';
 import { AppLayout } from './layouts/AppLayout';
 import { ContactPage } from './pages/ContactPage';
+import { SaucesPage } from './pages/SaucesPage';
 
 const queryClient = new QueryClient();
 
@@ -15,6 +15,7 @@ function App() {
         <AppLayout>
           <Routes>
             <Route path="/" element={<MyApp />} />
+            <Route path="/sauces" element={<SaucesPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </AppLayout>

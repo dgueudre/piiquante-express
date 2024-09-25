@@ -1,10 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
 
+import { Header } from '../components/Header';
+
 export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div>
-      <header>En-tête de l'application</header>
-      <nav>Navigation</nav>
+      <Header />
       <main>{children}</main>
       <footer>Pied de page</footer>
     </div>

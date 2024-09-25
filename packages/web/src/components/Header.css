@@ -1,0 +1,27 @@
+header {
+  display: flex;
+  border-bottom: 1px solid var(--color-black);
+  justify-content: space-between;
+}
+
+header ul {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+header li {
+  align-content: center;
+}
+
+header li a {
+  margin: 12px;
+}
+
+header section.logo {
+  display: flex;
+}
+
+header section.logo img {
+  height: 100px;
+}
