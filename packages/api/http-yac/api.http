@@ -35,7 +35,7 @@ Authorization: Bearer {{ token }}
     heat: 3
   })
 }}
-POST http://localhost:3011/admin/sauces
+POST http://localhost:3011/api/sauces
 Authorization: Bearer {{ token }}
 Content-Type: multipart/form-data; boundary=End
 

@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { sign, verify } from 'jsonwebtoken';
 
 import { JwtPayload } from '@piiquante/shared';
@@ -9,6 +10,10 @@ export const jwtService = {
     return sign(payload, JWT_SECRET, { expiresIn: '24h' });
   },
   verify: (token: string): JwtPayload => {
-    return verify(token, JWT_SECRET) as JwtPayload;
+    try {
+      return verify(token, JWT_SECRET) as JwtPayload;
+    } catch (error: any) {
+      throw createHttpError.Unauthorized(error?.message);
+    }
   },
 };
