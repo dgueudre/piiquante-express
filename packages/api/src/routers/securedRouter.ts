@@ -7,7 +7,7 @@ import { multipart } from '../middlewares/multipart';
 export const securedRouter = express
   .Router()
   .use(jwtGuard)
-  .get('/', sauceController.findAll)
+  .get('', sauceController.findAll)
   .get('/:id', sauceController.findOneById)
   .put('/:id', multipart('sauce', 'image'), sauceController.update)
   .post('', multipart('sauce', 'image'), sauceController.create)
