@@ -8,6 +8,7 @@
   "scripts": {
     "api": "cd packages/api && npm start",
     "web": "cd packages/web && npm run dev",
+    "angular": "cd ../piiquante-angular && npm run start",
     "format": "prettier --write ."
   },
   "dependencies": {
