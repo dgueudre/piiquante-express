@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useMutationLogin } from './hooks/tanstack/useMutationLogin';
+import { useMutationLogin } from '../hooks/tanstack/useMutationLogin';
 
 const schema = z.object({
   email: z.string().email(),
@@ -35,8 +35,6 @@ const LoginForm: FC = () => {
     return loginMutation.mutate({ email, password });
   });
 
-  console.log(errors);
-
   return (
     <div>
       <h2>Login</h2>
@@ -44,12 +42,14 @@ const LoginForm: FC = () => {
         <div>
           <label htmlFor="email">Email:</label>
           <input {...register('email')} />
+          <p className="form-error">{errors.email?.message}&nbsp;</p>
         </div>
         <div>
           <label htmlFor="password">Password:</label>
           <input {...register('password')} />
+          <p className="form-error">{errors.password?.message}&nbsp;</p>
         </div>
-        {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
+
         <button type="submit" disabled={isSubmitting}>
           Login
         </button>

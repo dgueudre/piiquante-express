@@ -41,6 +41,7 @@ input {
   --color-light-blue: #deebff;
   --color-dark-grey: #dadada;
   --color-grey: #f2f2f2;
+  --color-error: #a81e1e;
 }
 
 /* font */
@@ -57,17 +58,7 @@ a:hover {
   opacity: 0.8;
 }
 
-/* stars */
-.fa-star.on {
-  color: var(--color-blue);
-}
-
-.fa-star.off {
-  color: var(--color-dark-grey);
-}
-
-@media screen and (max-width: 768px) {
-  body {
-    font-size: 1.1em;
-  }
+/* form */
+form p.form-error {
+  color: var(--color-error);
 }
