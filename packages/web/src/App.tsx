@@ -1,25 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { MyApp } from './MyApp';
-import { AppLayout } from './layouts/AppLayout';
-import { ContactPage } from './pages/ContactPage';
-import { SaucesPage } from './pages/SaucesPage';
+import { AppRouter } from './AppRouter';
+import { AuthProvider } from './contexts/authContext';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/">
-        <AppLayout>
-          <Routes>
-            <Route path="/" element={<MyApp />} />
-            <Route path="/sauces" element={<SaucesPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </AppLayout>
-      </BrowserRouter>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -1,17 +1,17 @@
 import createHttpError from 'http-errors';
 import { sign, verify } from 'jsonwebtoken';
 
-import { JwtPayload } from '@piiquante/shared';
+import { IJwtFullPayload, IJwtPayload } from '@piiquante/shared';
 
 import { JWT_SECRET } from '../configuration';
 
 export const jwtService = {
-  sign: (payload: JwtPayload) => {
+  sign: (payload: IJwtPayload) => {
     return sign(payload, JWT_SECRET, { expiresIn: '24h' });
   },
-  verify: (token: string): JwtPayload => {
+  verify: (token: string): IJwtFullPayload => {
     try {
-      return verify(token, JWT_SECRET) as JwtPayload;
+      return verify(token, JWT_SECRET) as IJwtFullPayload;
     } catch (error: any) {
       throw createHttpError.Unauthorized(error?.message);
     }

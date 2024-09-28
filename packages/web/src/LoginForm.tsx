@@ -1,54 +1,58 @@
-import React, { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FC } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { api } from './api';
-import useForm from './hooks/useForm';
+import { useMutationLogin } from './hooks/tanstack/useMutationLogin';
 
-const LoginForm: React.FC = () => {
-  const [error, setError] = useState<string | null>(null);
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
 
-  const { values, handleChange, handleSubmit } = useForm({
-    initialValues: { email: '', password: '' },
-    onSubmit: async ({ email, password }) => {
-      setError(null);
+const resolver = zodResolver(schema);
 
-      try {
-        const data = await api.login(email, password);
-        console.log('Login successful:', data);
-        // Redirection ou actions supplémentaires ici
-      } catch (error: any) {
-        setError(error.message || 'An error occurred during login');
-      }
-    },
+const defaultValues: z.infer<typeof schema> = {
+  email: 'test@test.com',
+  password: '@secured-password',
+};
+
+const LoginForm: FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
+    resolver,
   });
+
+  const loginMutation = useMutationLogin();
+
+  const isSubmitting = loginMutation.isPending;
+
+  const onSubmit = handleSubmit(({ email, password }) => {
+    return loginMutation.mutate({ email, password });
+  });
+
+  console.log(errors);
 
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-            required
-          />
+          <input {...register('email')} />
         </div>
         <div>
           <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={values.password}
-            onChange={handleChange}
-            required
-          />
+          <input {...register('password')} />
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
+        <button type="submit" disabled={isSubmitting}>
+          Login
+        </button>
       </form>
     </div>
   );

@@ -2,9 +2,14 @@ export type User = {
   toto: string;
 };
 
-export type JwtPayload = {
+export type IJwtPayload = {
   userId: string;
 };
+
+export type IJwtFullPayload = {
+  exp: number;
+  iat: number;
+} & IJwtPayload;
 
 export type AuthPayload = {
   userId: string;
