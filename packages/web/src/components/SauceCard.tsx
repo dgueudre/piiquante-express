@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ISauce } from '@piiquante/shared';
+import { ISauceEntity } from '@piiquante/shared';
 
 import './SauceCard.css';
 
 type SauceCardProps = {
-  sauce: ISauce;
+  sauce: ISauceEntity;
 };
 
 export const SauceCard: FC<SauceCardProps> = ({ sauce }) => {

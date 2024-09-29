@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 
-import { IJwtFullPayload, IJwtPayload } from '@piiquante/shared';
+import { IJwtFullPayload } from '@piiquante/shared';
 
 const store = (token: string) => {
   localStorage.setItem('token', token);

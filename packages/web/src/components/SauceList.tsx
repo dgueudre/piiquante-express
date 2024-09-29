@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
-import { ISauce } from '@piiquante/shared';
+import { ISauceEntity } from '@piiquante/shared';
 
 import { SauceCard } from './SauceCard';
 import './SauceList.css';
 
 type SauceListProps = {
-  sauces?: ISauce[];
+  sauces?: ISauceEntity[];
 };
 
 export const SauceList: FC<SauceListProps> = ({ sauces }) => {

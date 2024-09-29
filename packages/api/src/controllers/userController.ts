@@ -2,11 +2,12 @@ import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
 import createHttpError from 'http-errors';
 
-import { AuthPayload } from '@piiquante/shared';
+import { AuthPayload, IUserEntity } from '@piiquante/shared';
 
 import { User } from '../models/User';
 import { jwtService } from '../services/jwtService';
 import safe from '../services/safe';
+import { loginSchema } from '../validations';
 
 /* POST /api/auth/signup { email: string, password: string }
 { message: string }
@@ -27,8 +28,9 @@ renvoie l _id de l'utilisateur depuis la base de données et un token web JSON s
 (contenant également l'_id de l'utilisateur).
 */
 const login: RequestHandler<AuthPayload> = async (req, res) => {
-  const { email, password: rawPassword } = req.body;
-  const user = (await User.findOne({ email })) as any;
+  const { email, password: rawPassword } = loginSchema.parse(req.body);
+  const test = await User.findOne({ email });
+  const user = test as IUserEntity;
   if (!user) {
     throw createHttpError.Unauthorized('Invalid credentials');
   }

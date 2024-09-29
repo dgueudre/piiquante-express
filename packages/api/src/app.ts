@@ -3,8 +3,6 @@ import express from 'express';
 import logger from 'morgan';
 import path from 'path';
 
-import { User } from '@piiquante/shared';
-
 import { errorHandler } from './middlewares/errorHandler';
 import { mainRouter } from './routers/mainRouter';
 import { dbService } from './services/dbService';
@@ -19,5 +17,3 @@ export const app = express()
   .use(express.static(path.join(__dirname, '../public')))
   .use(mainRouter)
   .use(errorHandler);
-
-let toto: User;

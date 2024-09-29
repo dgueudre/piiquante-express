@@ -1,18 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { useMutationLogin } from '../hooks/tanstack/useMutationLogin';
+import { ILoginPayload, loginSchema } from '../validations';
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
-
-const resolver = zodResolver(schema);
-
-const defaultValues: z.infer<typeof schema> = {
+const defaultValues: ILoginPayload = {
   email: 'test@test.com',
   password: '@secured-password',
 };
@@ -24,7 +17,7 @@ const LoginForm: FC = () => {
     formState: { errors },
   } = useForm({
     defaultValues,
-    resolver,
+    resolver: zodResolver(loginSchema),
   });
 
   const loginMutation = useMutationLogin();

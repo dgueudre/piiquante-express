@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-import { ISauce } from '@piiquante/shared';
+import { ISauceEntity } from '@piiquante/shared';
 
 const sauceSchema = new Schema({
   userId: { type: String, require: true },
@@ -16,4 +16,4 @@ const sauceSchema = new Schema({
   usersDisliked: { type: [String], require: false },
 });
 
-export const Sauce = model<ISauce>('Sauce', sauceSchema);
+export const Sauce = model<ISauceEntity>('Sauce', sauceSchema);

@@ -1,100 +1,65 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { ISauce } from '@piiquante/shared';
+import { ISauceEntity } from '@piiquante/shared';
 
 import { useMutationSauceUpdate } from '../hooks/tanstack/useMutationSauceUpdate';
-import useForm from '../hooks/useForm';
+import { ISaucePayload, sauceSchema } from '../validations';
 
 export type SauceFormProps = {
-  sauce: ISauce;
+  sauce: ISauceEntity;
 };
 
 export const SauceForm: FC<SauceFormProps> = ({ sauce }) => {
-  const { mutate } = useMutationSauceUpdate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ISaucePayload>({
+    defaultValues: sauce,
+    resolver: zodResolver(sauceSchema),
+  });
 
-  const { values, handleChange, handleSubmit } = useForm({
-    initialValues: sauce,
-    onSubmit: (sauce) => {
-      mutate(sauce);
-    },
+  const sauceUpdateMutation = useMutationSauceUpdate();
+
+  const isSubmitting = sauceUpdateMutation.isPending;
+
+  const onSubmit = handleSubmit((newSauce) => {
+    return sauceUpdateMutation.mutate({ id: sauce._id, sauce: newSauce });
   });
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          className="form-control"
-          id="name"
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-        />
+        <input {...register('name')} />
       </div>
       <div className="form-group">
         <label htmlFor="manufacturer">Manufacturer</label>
-        <input
-          type="text"
-          className="form-control"
-          id="manufacturer"
-          name="manufacturer"
-          value={values.manufacturer}
-          onChange={handleChange}
-        />
+        <input {...register('manufacturer')} />
       </div>
       <div className="form-group">
         <label htmlFor="description">Description</label>
-        <textarea
-          className="form-control"
-          id="description"
-          rows={5}
-          name="description"
-          value={values.description}
-          onChange={handleChange}
-        ></textarea>
+        <textarea {...register('description')}></textarea>
       </div>
       <div className="form-group">
         <input type="file" accept="image/*" />
-        <button mat-raised-button color="primary">
-          ADD IMAGE
-        </button>
+        <button color="primary">ADD IMAGE</button>
         <img />
       </div>
       <div className="form-group">
         <label htmlFor="main-pepper">Main Pepper Ingredient</label>
-        <input
-          type="text"
-          className="form-control"
-          id="main-pepper"
-          name="mainPepper"
-          value={values.mainPepper}
-          onChange={handleChange}
-        />
+        <input {...register('mainPepper')} />
       </div>
       <div className="form-group">
         <label htmlFor="heat">Heat</label>
         <div className="heat-container">
-          <input
-            type="range"
-            className="custom-range heat-range"
-            min="1"
-            max="10"
-            id="heat"
-            name="heat"
-            value={values.heat}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            className="form-control heat-reading"
-            name="heatValue"
-            value={values.heat}
-            onChange={handleChange}
-          />
+          <input type="range" {...register('heat')} />
+          <input {...register('heat')} />
         </div>
       </div>
-      <button mat-raised-button color="primary">
+      <button type="submit" disabled={isSubmitting}>
         SUBMIT
       </button>
     </form>

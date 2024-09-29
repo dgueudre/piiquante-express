@@ -1,23 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { api } from '../../api';
+import { ISaucePayload } from '../../validations';
 
 export const useMutationSauceUpdate = () => {
   return useMutation({
-    mutationFn: api.updateSauce,
+    mutationFn: ({ id, sauce }: { id: string; sauce: ISaucePayload }) =>
+      api.updateSauce(id, sauce),
+    onSuccess: (data) => {
+      console.log(data);
 
-    onSuccess: (result) => {
-      console.log(result);
-
-      console.log('Véhicule mis à jour avec succès');
+      console.log('MAJ OK');
     },
-
     onError: (err) => {
       console.log(err);
 
-      console.log(
-        'Echec lors de la mise à jour du véhicule, veuillez réessayer'
-      );
+      console.log('Echec');
     },
   });
 };
