@@ -14,6 +14,6 @@ export const app = express()
   .use(express.json())
   .use(cors())
   .use(express.urlencoded({ extended: false }))
-  .use(express.static(path.join(__dirname, '../public')))
+  .use(express.static(path.join(__dirname, './assets')))
   .use(mainRouter)
   .use(errorHandler);

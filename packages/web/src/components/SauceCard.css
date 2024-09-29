@@ -1,4 +1,4 @@
-.sauce-card>img {
+.sauce-card > img {
   max-width: 200px;
   max-height: 250px;
 }
@@ -9,7 +9,7 @@
   padding: 5px;
 }
 
-.sauce-card>* {
+.sauce-card > * {
   margin: 0;
 }
 

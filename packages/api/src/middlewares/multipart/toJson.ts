@@ -20,7 +20,9 @@ const unsafeToJson =
     req.body = JSON.parse(body[fieldName]);
 
     if (file) {
-      req.body.imageUrl = `${protocol}://${req.get('host')}/images/${file.filename}`;
+      req.body.imageUrl = `${protocol}://${req.get('host')}/images/${
+        file.filename
+      }`;
     }
 
     next();

@@ -1,12 +1,22 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
+    "rootDir": ".",
     "sourceMap": true,
-    "skipLibCheck": true
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@piiquante/shared": ["packages/shared/src/index.ts"]
+    }
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "tmp"]
 }

@@ -17,7 +17,9 @@ export const SauceList: FC<SauceListProps> = ({ sauces }) => {
         <p>No sauces to display!</p>
       ) : (
         <div className="sauce-list">
-          {sauces?.map((sauce) => <SauceCard key={sauce._id} sauce={sauce} />)}
+          {sauces?.map((sauce) => (
+            <SauceCard key={sauce._id} sauce={sauce} />
+          ))}
         </div>
       )}
     </>
