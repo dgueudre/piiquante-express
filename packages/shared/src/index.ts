@@ -13,3 +13,4 @@ export type AuthPayload = {
 };
 
 export * from './entities';
+export * from './validations';

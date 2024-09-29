@@ -2,12 +2,11 @@ import bcrypt from 'bcrypt';
 import { RequestHandler } from 'express';
 import createHttpError from 'http-errors';
 
-import { AuthPayload, IUserEntity } from '@piiquante/shared';
+import { AuthPayload, IUserEntity, loginSchema } from '@piiquante/shared';
 
 import { User } from '../models/User';
 import { jwtService } from '../services/jwtService';
 import safe from '../services/safe';
-import { loginSchema } from '../validations';
 
 /* POST /api/auth/signup { email: string, password: string }
 { message: string }
