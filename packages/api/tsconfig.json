@@ -3,7 +3,11 @@
   "compilerOptions": {
     "typeRoots": ["./src/@types"],
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "@piiquante/shared": ["../shared/src/index.ts"]
+    }
   },
+  "references": [{ "path": "../shared" }],
   "exclude": ["dist"]
 }
