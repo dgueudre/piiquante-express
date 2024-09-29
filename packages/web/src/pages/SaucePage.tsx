@@ -33,11 +33,9 @@ export const SaucePage = ({}) => {
         </div>
         <div className="like-pending"></div>
         <div className="control-buttons">
-          <button mat-raised-button>BACK</button>
+          <button>BACK</button>
           <Link to={`/sauces/${sauce._id}/edit`}>MODIFY</Link>
-          <button mat-raised-button color="warn">
-            DELETE
-          </button>
+          <button color="warn">DELETE</button>
         </div>
       </div>
     </div>

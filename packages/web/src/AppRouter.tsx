@@ -14,11 +14,7 @@ export const AppRouter = () => {
       <AppLayout>
         <Routes>
           <Route path="/" element={userId ? <SaucesPage /> : <LoginPage />} />
-          {!userId && (
-            <>
-              <Route path="/login" element={<LoginPage />} />
-            </>
-          )}
+          {!userId && <Route path="/login" element={<LoginPage />} />}
           {userId && (
             <>
               <Route path="/sauces/:id" element={<SaucePage />} />

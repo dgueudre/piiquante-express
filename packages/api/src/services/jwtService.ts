@@ -7,7 +7,7 @@ import { JWT_SECRET } from '../configuration';
 
 export const jwtService = {
   sign: (payload: IJwtPayload) => {
-    return sign(payload, JWT_SECRET, { expiresIn: '24h' });
+    return sign(payload, JWT_SECRET, { expiresIn: '1h' });
   },
   verify: (token: string): IJwtFullPayload => {
     try {

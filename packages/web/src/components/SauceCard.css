@@ -1,0 +1,19 @@
+.sauce-card>img {
+  max-width: 200px;
+  max-height: 250px;
+}
+
+.sauce-card {
+  margin: 20px;
+  text-align: center;
+  padding: 5px;
+}
+
+.sauce-card>* {
+  margin: 0;
+}
+
+.sauce-card:hover {
+  transform: scale(1.05);
+  box-shadow: 1px 1px 20px rgba(120, 120, 120, 0.3);
+}
