@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { ISaucePayload } from '@piiquante/shared';
+
 import { api } from '../../api';
-import { ISaucePayload } from '../../validations';
 
 export const useMutationSauceUpdate = () => {
   return useMutation({

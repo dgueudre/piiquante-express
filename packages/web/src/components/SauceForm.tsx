@@ -2,10 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { ISauceEntity } from '@piiquante/shared';
+import { ISauceEntity, ISaucePayload, sauceSchema } from '@piiquante/shared';
 
 import { useMutationSauceUpdate } from '../hooks/tanstack/useMutationSauceUpdate';
-import { ISaucePayload, sauceSchema } from '../validations';
 
 export type SauceFormProps = {
   sauce: ISauceEntity;

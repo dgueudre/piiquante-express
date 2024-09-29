@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-import { AuthPayload, ISauceEntity } from '@piiquante/shared';
-
-import { ILoginPayload, ISaucePayload } from './validations';
+import {
+  AuthPayload,
+  ILoginPayload,
+  ISauceEntity,
+  ISaucePayload,
+} from '@piiquante/shared';
 
 const API_URL = 'http://localhost:3011';
 

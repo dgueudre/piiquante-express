@@ -2,8 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { ILoginPayload, loginSchema } from '@piiquante/shared';
+
 import { useMutationLogin } from '../hooks/tanstack/useMutationLogin';
-import { ILoginPayload, loginSchema } from '../validations';
 
 const defaultValues: ILoginPayload = {
   email: 'test@test.com',

@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { ILoginPayload } from '@piiquante/shared';
+
 import { api } from '../../api';
 import { useAuth } from '../../contexts/authContext';
-import { ILoginPayload } from '../../validations';
 
 export function useMutationLogin() {
   const { onLogin } = useAuth();
