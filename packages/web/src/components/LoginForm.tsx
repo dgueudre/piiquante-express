@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { ILoginPayload, loginSchema } from '@piiquante/shared';
 
 import { useMutationLogin } from '../hooks/tanstack/useMutationLogin';
+import './LoginForm.css';
 
 const defaultValues: ILoginPayload = {
   email: 'test@test.com',
@@ -15,7 +16,7 @@ const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     defaultValues,
     resolver: zodResolver(loginSchema),
@@ -30,21 +31,18 @@ const LoginForm: FC = () => {
   });
 
   return (
-    <div>
+    <div className="login-page">
       <h2>Login</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input {...register('email')} />
-          <p className="form-error">{errors.email?.message}&nbsp;</p>
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input {...register('password')} />
-          <p className="form-error">{errors.password?.message}&nbsp;</p>
-        </div>
+      <form className="login-form" onSubmit={onSubmit}>
+        <label htmlFor="email">Email:</label>
+        <input {...register('email')} />
+        <p className="form-error">{errors.email?.message}&nbsp;</p>
 
-        <button type="submit" disabled={isSubmitting}>
+        <label htmlFor="password">Password:</label>
+        <input {...register('password')} />
+        <p className="form-error">{errors.password?.message}&nbsp;</p>
+
+        <button type="submit" disabled={isSubmitting || !isValid}>
           Login
         </button>
       </form>

@@ -36,7 +36,7 @@ input {
 /* vars */
 :root {
   --color-white: white;
-  --color-black: black;
+  --color-black: #212529;
   --color-blue: #0065fc;
   --color-light-blue: #deebff;
   --color-dark-grey: #dadada;
@@ -47,6 +47,7 @@ input {
 /* font */
 body {
   font-family: 'Raleway', sans-serif;
+  color: var(--color-black);
 }
 
 h2,

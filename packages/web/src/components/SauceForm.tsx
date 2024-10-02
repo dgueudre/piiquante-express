@@ -1,10 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { Navigate } from 'react-router-dom';
 
-import { ISauceEntity, ISaucePayload, sauceSchema } from '@piiquante/shared';
+import { ISauceEntity } from '@piiquante/shared';
 
 import { useMutationSauceUpdate } from '../hooks/tanstack/useMutationSauceUpdate';
+import {
+  ISauceWithFilePayload,
+  sauceWithFileSchema,
+} from './sauceWithFileSchema';
 
 export type SauceFormProps = {
   sauce: ISauceEntity;
@@ -14,10 +19,11 @@ export const SauceForm: FC<SauceFormProps> = ({ sauce }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<ISaucePayload>({
+  } = useForm<ISauceWithFilePayload>({
     defaultValues: sauce,
-    resolver: zodResolver(sauceSchema),
+    resolver: zodResolver(sauceWithFileSchema),
   });
 
   const sauceUpdateMutation = useMutationSauceUpdate();
@@ -27,6 +33,14 @@ export const SauceForm: FC<SauceFormProps> = ({ sauce }) => {
   const onSubmit = handleSubmit((newSauce) => {
     return sauceUpdateMutation.mutate({ id: sauce._id, sauce: newSauce });
   });
+
+  if (sauceUpdateMutation.isSuccess) {
+    return <Navigate to={'/sauces'} />;
+  }
+
+  const files = watch('file');
+  const file = files?.[0];
+  const fileUrl = file ? URL.createObjectURL(file) : sauce.imageUrl;
 
   return (
     <form onSubmit={onSubmit}>
@@ -43,9 +57,8 @@ export const SauceForm: FC<SauceFormProps> = ({ sauce }) => {
         <textarea {...register('description')}></textarea>
       </div>
       <div className="form-group">
-        <input type="file" accept="image/*" />
-        <button color="primary">ADD IMAGE</button>
-        <img />
+        <input {...register('file')} type="file" accept="image/*" />
+        <img src={fileUrl} alt="" />
       </div>
       <div className="form-group">
         <label htmlFor="main-pepper">Main Pepper Ingredient</label>

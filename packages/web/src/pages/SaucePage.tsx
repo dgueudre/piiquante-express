@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 
 import { useQuerySauces } from '../hooks/tanstack/useQuerySauces';
+import './SaucePage.css';
 
 export const SaucePage = ({}) => {
   const { id } = useParams<{ id: string }>();

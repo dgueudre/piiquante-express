@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { RawAxiosRequestHeaders } from 'axios';
 
 import {
   AuthPayload,
@@ -7,12 +7,14 @@ import {
   ISaucePayload,
 } from '@piiquante/shared';
 
+import { ISauceWithFilePayload } from './components/sauceWithFileSchema';
+
 const API_URL = 'http://localhost:3011';
 
-const authHeaders = () => {
+const authHeaders = (): RawAxiosRequestHeaders => {
   const token = localStorage.getItem('token');
 
-  return { headers: { Authorization: 'Bearer ' + token } };
+  return { Authorization: 'Bearer ' + token };
 };
 
 const login = async ({ email, password }: ILoginPayload) => {
@@ -26,19 +28,32 @@ const login = async ({ email, password }: ILoginPayload) => {
 };
 
 const getAllSauces = async () => {
-  const { data } = await axios.get<ISauceEntity[]>(
-    `${API_URL}/api/sauces`,
-    authHeaders()
-  );
+  const { data } = await axios.get<ISauceEntity[]>(`${API_URL}/api/sauces`, {
+    headers: authHeaders(),
+  });
 
   return data;
 };
 
-const updateSauce = async (id: string, sauce: ISaucePayload) => {
+const updateSauce = async (id: string, sauce: ISauceWithFilePayload) => {
+  let body: FormData | ISaucePayload;
+  console.log(sauce);
+  const { file, ...newSauce } = sauce;
+
+  if (file?.length === 1) {
+    body = new FormData();
+    body.append('image', file[0]);
+    body.append('sauce', JSON.stringify(newSauce));
+  } else {
+    body = newSauce;
+  }
+
+  console.log(body);
+
   const { data } = await axios.put<ISaucePayload>(
     `${API_URL}/api/sauces/${id}`,
-    sauce,
-    authHeaders()
+    body,
+    { headers: authHeaders() }
   );
 
   return data;

@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
 import { Header } from '../components/Header';
+import './AppLayout.css';
 
 export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
   return (

@@ -9,7 +9,6 @@ export function useQuerySauces() {
   return useQuery({
     queryKey: ['sauces'],
     queryFn: () => api.getAllSauces(),
-    staleTime: 1,
     enabled: !!userId,
   });
 }
